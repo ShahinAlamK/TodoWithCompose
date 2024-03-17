@@ -49,7 +49,7 @@ fun RegisterScreen(nav: NavController) {
             CustomField(
                 value = usernameText,
                 onValueChange = { usernameText = it },
-                placeholder = "Enter Username",
+                placeholder = "Username",
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
                 leadingIcon = {
                     Icon(

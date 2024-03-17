@@ -9,6 +9,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.VisualTransformation
 
 @Composable
 fun CustomField(
@@ -16,7 +17,9 @@ fun CustomField(
     onValueChange: (String) -> Unit,
     placeholder: String,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
     leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
 ) {
 
     TextField(
@@ -33,8 +36,10 @@ fun CustomField(
         value = value,
         onValueChange = onValueChange,
         keyboardOptions = keyboardOptions,
+        visualTransformation = visualTransformation,
         singleLine = true,
         placeholder = { Text(text = placeholder, style = MaterialTheme.typography.bodyMedium) },
-        leadingIcon = leadingIcon
+        leadingIcon = leadingIcon,
+        trailingIcon = trailingIcon
     )
 }

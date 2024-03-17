@@ -9,17 +9,21 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.todo.R
@@ -33,15 +37,15 @@ fun LoginScreen(nav: NavController) {
 
     var emailText by remember { mutableStateOf("") }
     var passwordsText by remember { mutableStateOf("") }
+    var passwordVisible by rememberSaveable { mutableStateOf(false) }
 
-
-    LazyColumn (
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 30.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        item{
+        item {
             Spacer(modifier = Modifier.height(100.dp))
 
             Text(text = "Login", style = MaterialTheme.typography.headlineLarge)
@@ -69,11 +73,20 @@ fun LoginScreen(nav: NavController) {
                 onValueChange = { passwordsText = it },
                 placeholder = "Passwords",
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password),
+                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 leadingIcon = {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_lock),
                         contentDescription = ""
                     )
+                },
+                trailingIcon = {
+                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                        Icon(
+                            painter = painterResource(id =if(passwordVisible)R.drawable.visibility_off  else R.drawable.visibility),
+                            contentDescription = ""
+                        )
+                    }
                 }
             )
 
@@ -81,14 +94,14 @@ fun LoginScreen(nav: NavController) {
 
             Buttons(
                 label = "Login",
-                onClick = {nav.navigate(RouteItem.Home.route)}
+                onClick = { nav.navigate(RouteItem.Home.route) }
             )
 
             Spacer(modifier = Modifier.height(40.dp))
             Buttons(
                 isOutline = true,
                 label = "Create a account",
-                onClick = {nav.navigate(RouteItem.Register.route)}
+                onClick = { nav.navigate(RouteItem.Register.route) }
             )
 
             Spacer(modifier = Modifier.height(50.dp))
