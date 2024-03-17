@@ -1,4 +1,4 @@
-package com.example.todo.screens
+package com.example.todo.screens.users
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -23,6 +23,10 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,19 +37,23 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.todo.R
+import com.example.todo.components.Buttons
+import com.example.todo.components.CustomField
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(nav: NavController) {
-    Scaffold(
 
+    var username by remember { mutableStateOf("Shahin Alam Kiron") }
+
+    Scaffold(
         topBar = {
             TopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimary,
-                    navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
-                    actionIconContentColor = MaterialTheme.colorScheme.onPrimary,
+                    containerColor = MaterialTheme.colorScheme.background,
+                    titleContentColor = MaterialTheme.colorScheme.onBackground,
+                    navigationIconContentColor = MaterialTheme.colorScheme.onBackground,
+                    actionIconContentColor = MaterialTheme.colorScheme.onBackground,
                 ),
 
 
@@ -63,8 +71,8 @@ fun ProfileScreen(nav: NavController) {
 
         }
 
-
     ) { paddingValues ->
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -80,40 +88,29 @@ fun ProfileScreen(nav: NavController) {
                     .size(90.dp)
                     .clip(CircleShape)
                     .background(MaterialTheme.colorScheme.primary)
-            ){
+            ) {
                 AsyncImage(
                     contentScale = ContentScale.Crop,
                     model = "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGF2YXRhcnxlbnwwfHwwfHx8MA%3D%3D",
-                    contentDescription = "")
+                    contentDescription = ""
+                )
             }
             Spacer(modifier = Modifier.size(20.dp))
-            TextField(
-                modifier = Modifier.fillMaxWidth(),
-                colors = TextFieldDefaults.colors(
-                    unfocusedContainerColor = Color.Transparent,
-                    focusedContainerColor = Color.Transparent,
-                ),
-                singleLine = true,
-                placeholder = { Text(text = "Username")},
-                value = "SHAHIN ALAM",
-                onValueChange = {})
+            CustomField(
+                leadingIcon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_person),
+                        contentDescription = ""
+                    )
+                },
+                value = username,
+                onValueChange = { username = it },
+                placeholder = "Username"
+            )
 
             Spacer(modifier = Modifier.size(30.dp))
+            Buttons(label = "Update", onClick = {})
 
-            ElevatedButton(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp),
-                shape = MaterialTheme.shapes.small,
-                elevation = ButtonDefaults.elevatedButtonElevation(0.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary
-                ),
-                onClick = { /*TODO*/ }) {
-                Text(text = "Update", style = MaterialTheme.typography.bodyLarge)
-            }
-            
         }
     }
 }

@@ -19,7 +19,9 @@ import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -45,6 +47,10 @@ fun NewTodo(isOpen: MutableState<Boolean>) {
 
     if (isOpen.value)
         AlertDialog(
+            containerColor = MaterialTheme.colorScheme.background,
+            titleContentColor = MaterialTheme.colorScheme.onBackground,
+            textContentColor = MaterialTheme.colorScheme.onBackground,
+            tonalElevation = 6.dp,
             shape = MaterialTheme.shapes.small,
             modifier = Modifier.fillMaxWidth(),
             onDismissRequest = {},
@@ -72,6 +78,11 @@ fun NewTodo(isOpen: MutableState<Boolean>) {
             text = {
                 Column {
                     OutlinedTextField(
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedPlaceholderColor = MaterialTheme.colorScheme.onBackground,
+                            unfocusedPlaceholderColor = MaterialTheme.colorScheme.onBackground,
+                        ),
+                        singleLine = true,
                         modifier = Modifier.fillMaxWidth(),
                         value = "",
                         onValueChange = {},
@@ -86,6 +97,11 @@ fun NewTodo(isOpen: MutableState<Boolean>) {
                     Spacer(modifier = Modifier.height(15.dp))
 
                     OutlinedTextField(
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedPlaceholderColor = MaterialTheme.colorScheme.onBackground,
+                            unfocusedPlaceholderColor = MaterialTheme.colorScheme.onBackground,
+                        ),
+                        singleLine = true,
                         modifier = Modifier.fillMaxWidth(),
                         value = "",
                         onValueChange = {},
@@ -99,10 +115,10 @@ fun NewTodo(isOpen: MutableState<Boolean>) {
 
                     Spacer(modifier = Modifier.height(20.dp))
 
-                    LazyRow (
+                    LazyRow(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(10.dp)
-                    ){
+                    ) {
                         items(colorList.size) {
                             Box(
                                 modifier = Modifier
@@ -111,31 +127,20 @@ fun NewTodo(isOpen: MutableState<Boolean>) {
                                     .background(colorList[it])
                                     .padding(10.dp)
                                     .clickable { selectColor = it }
-                            ){
-                                if (selectColor==it){
+                            ) {
+                                if (selectColor == it) {
                                     Icon(
                                         tint = MaterialTheme.colorScheme.onPrimary,
                                         painter = painterResource(id = R.drawable.ic_check),
-                                        contentDescription = "")
+                                        contentDescription = ""
+                                    )
                                 }
                             }
                         }
                     }
 
                     Spacer(modifier = Modifier.height(25.dp))
-                    ElevatedButton(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(50.dp),
-                        shape = MaterialTheme.shapes.small,
-                        elevation = ButtonDefaults.elevatedButtonElevation(0.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.primary,
-                            contentColor = MaterialTheme.colorScheme.onPrimary
-                        ),
-                        onClick = { /*TODO*/ }) {
-                        Text(text = "Create", style = MaterialTheme.typography.bodyLarge)
-                    }
+                    Buttons(label = "Create", onClick = {})
                 }
             }
         )
