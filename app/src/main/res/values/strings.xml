@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Todo</string>
+    <string name="delete">Delete</string>
+    <string name="update">Update</string>
+    <string name="create">Create a Todo</string>
+    <string name="empty">Empty Todo</string>
+    <string name="success">Successfully Todo</string>
+</resources>
