@@ -3,7 +3,7 @@ package com.example.todo.ui.theme
 import androidx.compose.ui.graphics.Color
 
 //Dark-Theme-Color
-val Primary = Color(0xFF009AFD)
+val Primary = Color(0xFF0F100F)
 val Background = Color(0xFF0D0D0E)
 val Tertiary = Color(0xFF414342)
 
@@ -13,6 +13,6 @@ val Black = Color(0xFF0D0D0E)
 val Red = Color(0xFFF13131)
 
 //Light-Theme-Color
-val LPrimary = Color(0xFF2CC97A)
+val LPrimary = Color(0xFF44C884)
 val LBackground = Color(0xFFF3F3F3)
 val LTertiary = Color(0xFFB4BBB7)

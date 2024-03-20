@@ -53,7 +53,7 @@ fun HomeScreen(nav: NavController) {
         topBar = {
             TopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background,
+                    containerColor = MaterialTheme.colorScheme.primary,
                     titleContentColor = MaterialTheme.colorScheme.onBackground,
                     navigationIconContentColor = MaterialTheme.colorScheme.onBackground,
                     actionIconContentColor = MaterialTheme.colorScheme.onBackground,
@@ -79,6 +79,7 @@ fun HomeScreen(nav: NavController) {
                 actions = {
 
                     RoundIcon(
+                        color = MaterialTheme.colorScheme.background,
                         icon = {
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_add),
@@ -89,6 +90,7 @@ fun HomeScreen(nav: NavController) {
                     )
                     Spacer(modifier = Modifier.size(20.dp))
                     RoundIcon(
+                        color = MaterialTheme.colorScheme.background,
                         icon = {
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_notifications),
