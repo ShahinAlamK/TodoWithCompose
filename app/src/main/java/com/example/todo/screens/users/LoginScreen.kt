@@ -1,5 +1,6 @@
 package com.example.todo.screens.users
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -31,15 +33,23 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.todo.R
 import com.example.todo.components.Buttons
 import com.example.todo.components.CustomField
+import com.example.todo.data.viewmodel.AuthVideModel
 import com.example.todo.navGraph.RouteItem
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
+@SuppressLint("SuspiciousIndentation")
 @Composable
-fun LoginScreen(nav: NavController) {
+fun LoginScreen(nav: NavController, authVideModel: AuthVideModel = hiltViewModel()) {
+
+    val auth = authVideModel.res.value
 
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -54,9 +64,12 @@ fun LoginScreen(nav: NavController) {
 
         Image(
             contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxHeight().blur(8.dp),
+            modifier = Modifier
+                .fillMaxHeight()
+                .blur(8.dp),
             painter = painterResource(id = R.drawable.bg),
-            contentDescription = "")
+            contentDescription = ""
+        )
 
         LazyColumn(
             modifier = Modifier
@@ -111,17 +124,30 @@ fun LoginScreen(nav: NavController) {
                 )
 
                 Spacer(modifier = Modifier.height(70.dp))
+                if (auth.loading) CircularProgressIndicator() else
+                Buttons(
+                    label = "Login",
+                    onClick = {
+                        scope.launch(Dispatchers.Main) {
+                            authVideModel.loginWithEmail(
+                                email = emailText.trim(),
+                                passwords = passwordsText.trim()
+                            )
+                        }
 
-                    Buttons(
-                        label = "Login",
-                        onClick = {nav.navigate(RouteItem.Home.route)}
-                    )
+                       // nav.navigate(RouteItem.Home.route)
+                    }
+                )
+                if (auth.data){nav.navigate(RouteItem.Home.route)}
 
                 Spacer(modifier = Modifier.height(40.dp))
+
                 Buttons(
                     isOutline = true,
                     label = "Create a account",
-                    onClick = { nav.navigate(RouteItem.Register.route) }
+                    onClick = {
+                        nav.navigate(RouteItem.Register.route)
+                    }
                 )
 
                 Spacer(modifier = Modifier.height(50.dp))

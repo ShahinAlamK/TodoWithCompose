@@ -12,24 +12,31 @@ import javax.inject.Inject
 
 class AuthRepo @Inject constructor(
     private val auth: FirebaseAuth,
-    private val db:FirebaseFirestore
+    private val db: FirebaseFirestore
 ) : AuthService {
-    override fun loginWithEmail(email: String, password: String): Flow<AppResponse<String>> = callbackFlow {
-        trySend(AppResponse.Loading)
-        try {
-            auth.signInWithEmailAndPassword(email, password)
-                .addOnSuccessListener {
-                    trySend(AppResponse.Success("success"))
-                }.addOnFailureListener {
-                    trySend(AppResponse.Failure(it))
-                }
-        }catch (e:Exception){
-            trySend(AppResponse.Failure(e))
-        }
-        awaitClose { close() }
-    }
 
-    override fun createWithEmail(username: String, email: String, password: String): Flow<AppResponse<String>> =
+    val currentUser = auth.currentUser
+    override fun loginWithEmail(email: String, password: String): Flow<AppResponse<String>> =
+        callbackFlow {
+            trySend(AppResponse.Loading)
+            try {
+                auth.signInWithEmailAndPassword(email, password)
+                    .addOnSuccessListener {
+                        trySend(AppResponse.Success("success"))
+                    }.addOnFailureListener {
+                        trySend(AppResponse.Failure(it))
+                    }
+            } catch (e: Exception) {
+                trySend(AppResponse.Failure(e))
+            }
+            awaitClose { close() }
+        }
+
+    override fun createWithEmail(
+        username: String,
+        email: String,
+        password: String
+    ): Flow<AppResponse<String>> =
         callbackFlow {
 
             trySend(AppResponse.Loading)
@@ -37,11 +44,11 @@ class AuthRepo @Inject constructor(
                 auth.createUserWithEmailAndPassword(email, password)
                     .addOnSuccessListener {
                         trySend(AppResponse.Success("success"))
-                       db.collection("user").document(it?.user?.uid!!)
+                        db.collection("user").document(it?.user?.uid!!)
                     }.addOnFailureListener {
                         trySend(AppResponse.Failure(it))
                     }
-            }catch (e:Exception){
+            } catch (e: Exception) {
                 trySend(AppResponse.Failure(e))
             }
             awaitClose { close() }

@@ -8,7 +8,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -28,18 +31,25 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.todo.R
 import com.example.todo.components.DeleteTodo
+import com.example.todo.components.EmptyMsg
+import com.example.todo.components.LoadingComponent
 import com.example.todo.components.NewTodo
 import com.example.todo.components.RoundIcon
 import com.example.todo.components.TodoCard
+import com.example.todo.data.viewmodel.TodoViewModel
 import com.example.todo.navGraph.RouteItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(nav: NavController) {
+fun HomeScreen(nav: NavController, todoViewModel: TodoViewModel = hiltViewModel()) {
+
+
+    val res = todoViewModel.res.value
 
     val isDialog = remember { mutableStateOf(false) }
     val isDelete = remember { mutableStateOf(false) }
@@ -67,12 +77,13 @@ fun HomeScreen(nav: NavController) {
                             .size(35.dp)
                             .clip(CircleShape)
                             .background(MaterialTheme.colorScheme.background)
-                            .clickable {nav.navigate(RouteItem.Profile.route) }
+                            .clickable { nav.navigate(RouteItem.Profile.route) }
                     ) {
                         AsyncImage(
                             contentScale = ContentScale.Crop,
                             model = "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGF2YXRhcnxlbnwwfHwwfHx8MA%3D%3D",
-                            contentDescription = "")
+                            contentDescription = ""
+                        )
                     }
                 },
 
@@ -108,17 +119,34 @@ fun HomeScreen(nav: NavController) {
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
 
     ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .padding(paddingValues)
-                .padding(horizontal = 10.dp)
-        ) {
-            Spacer(modifier = Modifier.height(10.dp))
-            TodoCard(
-                delete = { isDelete.value = true }
-            )
 
+        Box(
+            modifier = Modifier.padding(paddingValues)
+        ) {
+            if (res.isLoading) {
+                LoadingComponent()
+            } else if (res.msg.isNotEmpty()) {
+                Text(text = res.msg)
+            } else if (res.todoList.isEmpty()) {
+                EmptyMsg()
+            } else if (res.todoList.isNotEmpty()) {
+                LazyColumn(
+                    modifier = Modifier
+                        .padding(horizontal = 10.dp)
+                ) {
+                    items(res.todoList.size) {
+                        Spacer(modifier = Modifier.height(10.dp))
+                        TodoCard(
+                            index = it + 1,
+                            todoModel = res.todoList[it],
+                            delete = { isDelete.value = true }
+                        )
+                    }
+
+                }
+            }
         }
+
     }
 }
 

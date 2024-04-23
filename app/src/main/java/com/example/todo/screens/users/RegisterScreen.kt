@@ -42,6 +42,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun RegisterScreen(nav: NavController, vm: AuthVideModel = hiltViewModel()) {
 
+    val auth = vm.res.value
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
 
@@ -121,7 +122,8 @@ fun RegisterScreen(nav: NavController, vm: AuthVideModel = hiltViewModel()) {
 
                 Spacer(modifier = Modifier.height(70.dp))
 
-                if (vm.isLoading.value) {
+
+                if (auth.loading) {
                     CircularProgressIndicator()
                 } else {
                     Buttons(
@@ -132,6 +134,9 @@ fun RegisterScreen(nav: NavController, vm: AuthVideModel = hiltViewModel()) {
                             }
                         }
                     )
+                }
+                if (auth.data){
+                    nav.navigate(RouteItem.Home.route)
                 }
                 Spacer(modifier = Modifier.height(50.dp))
             }

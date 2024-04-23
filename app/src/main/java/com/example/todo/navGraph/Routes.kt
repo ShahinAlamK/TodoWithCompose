@@ -12,7 +12,7 @@ import com.example.todo.screens.users.RegisterScreen
 @Composable
 fun Routes(navHost: NavHostController) {
 
-    NavHost(navController = navHost, startDestination = RouteItem.Login.route) {
+    NavHost(navController = navHost, startDestination = RouteItem.Home.route) {
         composable(RouteItem.Login.route) { LoginScreen(nav = navHost) }
         composable(RouteItem.Register.route) { RegisterScreen(nav = navHost) }
         composable(RouteItem.Home.route) { HomeScreen(nav = navHost) }
